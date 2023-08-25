@@ -99,7 +99,10 @@ impl Board {
         }
         Ok(())
     }
-    pub fn select_piece(&self, position: Position, player: Player) -> Result<Piece, SelectError> {
+    pub fn select_piece<T>(&self, position: Position, player: Player) -> Result<T, SelectError>
+        where
+        T: Piece,
+    {
         match self.get_tile(position).piece {
             None => Err(SelectError::NoPieceAtPosition),
             Some(piece) if piece.piece_color != player.color => Err(SelectError::WrongColor),
@@ -132,7 +135,9 @@ pub enum Color {
 trait Piece {
     fn get_moves(position:Position, board: &Board) -> Vec<Position>;
     fn get_type(&self) -> PieceType;
-    fn get_color(&self) -> Color;
+    fn get_color(&self) -> Color {
+        self.color
+    }
 }
 
 pub struct Pawn{
@@ -151,14 +156,21 @@ impl Piece for Pawn {
     fn get_moves(position:Position, board: &Board) -> Vec<Position> {
         vec![Position::new(0,3)]
     }
-    fn get_color(&self) -> Color {
-        self.color
-    }
 }
 pub struct Rook {
     color:Color,
     has_moved: bool,
 }
+impl Piece for Rook {
+    fn get_type(&self) -> PieceType {
+        PieceType::Rook
+    }
+    fn get_moves(position:Position, board: &Board) -> Vec<Position> {
+        let mut possible_moves: Vec<Position> = Vec::new();
+
+    }
+}
+
 pub struct Knight {
     color:Color
 }
