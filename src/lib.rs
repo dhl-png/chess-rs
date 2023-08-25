@@ -133,6 +133,7 @@ pub enum Color {
 }
 
 trait Piece {
+    fn new(piece_color: Color) -> Self;
     fn get_moves(position:Position, board: &Board) -> Vec<Position>;
     fn get_type(&self) -> PieceType;
     fn get_color(&self) -> Color {
@@ -150,6 +151,9 @@ impl Pawn {
     }
 }
 impl Piece for Pawn {
+    fn new(&self,color: Color) -> Self {
+        Pawn { color, has_moved: false, has_double_moved: false }
+    }
     fn get_type(&self) -> PieceType {
         PieceType::Pawn
     }
@@ -162,6 +166,9 @@ pub struct Rook {
     has_moved: bool,
 }
 impl Piece for Rook {
+    fn new(color: Color) -> Self {
+        Rook { color, has_moved: false }
+    }
     fn get_type(&self) -> PieceType {
         PieceType::Rook
     }
@@ -185,11 +192,6 @@ pub struct King{
     has_moved: bool,
 }
 
-trait PieceTriat {
-    pub fn new(piece_type: PieceType, piece_color: Color) -> Self {
-       Piece {piece_type, piece_color}
-    }
-}
 
 
 #[derive(Clone,Copy,Debug)]
